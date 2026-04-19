@@ -1,0 +1,31 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/todo/todo",
+    "pages/goal/goal",
+    "pages/focus/focus",
+    "pages/summary/summary",
+    "pages/category/category"
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1A73E8",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index",     "text": "今日",  "iconPath": "images/tab-home.png",         "selectedIconPath": "images/tab-home-active.png" },
+      { "pagePath": "pages/focus/focus",     "text": "专注",  "iconPath": "images/tab-focus.png",        "selectedIconPath": "images/tab-focus-active.png" },
+      { "pagePath": "pages/goal/goal",       "text": "目标",  "iconPath": "images/tab-goal.png",         "selectedIconPath": "images/tab-goal-active.png" },
+      { "pagePath": "pages/summary/summary", "text": "汇总",  "iconPath": "images/tab-summary.png",      "selectedIconPath": "images/tab-summary-active.png" }
+    ]
+  },
+  "window": {
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F5F5"
+  },
+  "style": "v2",
+  "useExtendedLib": { "weui": true },
+  "sitemapLocation": "sitemap.json"
+}

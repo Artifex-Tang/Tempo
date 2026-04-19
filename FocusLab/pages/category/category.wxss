@@ -1,0 +1,24 @@
+.page { padding: 24rpx 24rpx 160rpx; }
+
+.list { }
+.cat-item { display: flex; align-items: center; gap: 20rpx; padding: 20rpx 24rpx; }
+.color-dot { width: 32rpx; height: 32rpx; border-radius: 50%; flex-shrink: 0; }
+.cat-name { flex: 1; font-size: 30rpx; color: var(--color-text); }
+.cat-actions { display: flex; gap: 12rpx; flex-shrink: 0; }
+.action-btn { font-size: 24rpx; color: var(--color-primary); padding: 8rpx 16rpx; border-radius: 6rpx; background: #EEF4FF; }
+.action-btn.danger { color: var(--color-danger); background: #FFF1F0; }
+
+.add-btn { margin-top: 24rpx; width: 100%; font-size: 28rpx; }
+
+.color-grid { display: flex; flex-wrap: wrap; gap: 20rpx; margin-top: 8rpx; }
+.color-circle {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 4rpx solid transparent;
+  box-sizing: border-box;
+}
+.color-selected { border-color: rgba(0,0,0,0.25); box-shadow: 0 0 0 4rpx rgba(0,0,0,0.08); }
+.check-mark { color: #fff; font-size: 28rpx; font-weight: bold; text-shadow: 0 1rpx 4rpx rgba(0,0,0,0.3); }
+
+.modal-title { font-size: 32rpx; font-weight: bold; }
+.modal-close { font-size: 36rpx; color: var(--color-text-sub); padding: 8rpx; }

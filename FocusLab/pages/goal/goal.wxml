@@ -1,0 +1,118 @@
+<view class="page">
+  <!-- 类型筛选 chips -->
+  <view class="type-chips">
+    <view wx:for="{{typeLabels}}" wx:key="*this"
+          class="chip {{(index===0 && activeType===null) || activeType===index ? 'chip-active' : ''}}"
+          bindtap="setType" data-idx="{{index}}">{{item}}</view>
+  </view>
+
+  <!-- 目标列表 -->
+  <view wx:if="{{loading}}" class="empty"><text>加载中...</text></view>
+  <view wx:elif="{{goals.length === 0}}" class="empty"><text>暂无目标</text></view>
+  <view wx:else>
+    <view wx:for="{{goals}}" wx:key="id" class="goal-card card">
+      <view class="goal-header">
+        <view class="type-badge type-{{item.type}}">{{item.type===1?'日':item.type===2?'周':'月'}}</view>
+        <text class="goal-title">{{item.title}}</text>
+        <view class="status-badge status-{{item.status}}">
+          {{item.status===0?'进行中':item.status===1?'已达成':'未达成'}}
+        </view>
+      </view>
+
+      <text wx:if="{{item.description}}" class="goal-desc">{{item.description}}</text>
+      <text class="goal-date">截止：{{item.targetDate}}</text>
+
+      <!-- 进度条（进行中时显示） -->
+      <view wx:if="{{item.status === 0}}" class="progress-wrap">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width:{{item.progress}}%"></view>
+        </view>
+        <text class="progress-text">{{item.progress}}%</text>
+      </view>
+      <view wx:if="{{item.status === 0}}" class="slider-wrap">
+        <slider min="0" max="100" value="{{item.progress}}"
+                bindchange="updateProgress" data-id="{{item.id}}"
+                show-value="false" block-size="20"
+                activeColor="#1A73E8" backgroundColor="#EEEEEE" />
+      </view>
+
+      <text wx:if="{{item.finishNote}}" class="finish-note">📝 {{item.finishNote}}</text>
+
+      <view class="goal-actions">
+        <text class="action-btn" bindtap="openEdit" data-item="{{item}}">编辑</text>
+        <text wx:if="{{item.status === 0}}" class="action-btn done-btn" bindtap="openFinish" data-id="{{item.id}}">完成</text>
+        <text class="action-btn danger" bindtap="removeGoal" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- FAB -->
+  <view class="fab" bindtap="openCreate">+</view>
+
+  <!-- 新建/编辑弹窗 -->
+  <view wx:if="{{showModal}}">
+    <view class="modal-mask" bindtap="closeModal"></view>
+    <view class="modal-sheet">
+      <view class="modal-header">
+        <text class="modal-title">{{isEdit ? '编辑目标' : '新建目标'}}</text>
+        <text class="modal-close" bindtap="closeModal">✕</text>
+      </view>
+      <scroll-view scroll-y class="modal-body">
+        <view class="field">
+          <text class="field-label">标题 *</text>
+          <input class="field-input" value="{{form.title}}" placeholder="目标标题" bindinput="onFormInput" data-field="title" />
+        </view>
+        <view class="field">
+          <text class="field-label">描述</text>
+          <textarea class="field-textarea" value="{{form.description}}" placeholder="可选" bindinput="onFormInput" data-field="description" />
+        </view>
+        <view class="field">
+          <text class="field-label">类型</text>
+          <view class="priority-row">
+            <view class="pri-btn {{form.type===1?'pri-active-2':''}}" bindtap="setGoalType" data-t="1">日</view>
+            <view class="pri-btn {{form.type===2?'pri-active-2':''}}" bindtap="setGoalType" data-t="2">周</view>
+            <view class="pri-btn {{form.type===3?'pri-active-2':''}}" bindtap="setGoalType" data-t="3">月</view>
+          </view>
+        </view>
+        <view class="field">
+          <text class="field-label">截止日期 *</text>
+          <picker mode="date" value="{{form.targetDate}}" bindchange="onTargetDate">
+            <view class="field-picker">{{form.targetDate || '选择日期'}}</view>
+          </picker>
+        </view>
+      </scroll-view>
+      <view class="modal-footer">
+        <button class="btn-ghost"   style="flex:1;" bindtap="closeModal">取消</button>
+        <button class="btn-primary" style="flex:2;" bindtap="submitForm">{{isEdit ? '保存' : '创建'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 完成弹窗 -->
+  <view wx:if="{{showFinishModal}}">
+    <view class="modal-mask" bindtap="closeFinishModal"></view>
+    <view class="modal-sheet">
+      <view class="modal-header">
+        <text class="modal-title">完成目标</text>
+        <text class="modal-close" bindtap="closeFinishModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <view class="field">
+          <text class="field-label">结果</text>
+          <view class="priority-row">
+            <view class="pri-btn {{finishStatus===1?'pri-active-3':''}}" bindtap="setFinishStatus" data-s="1">已达成</view>
+            <view class="pri-btn {{finishStatus===2?'pri-active-1':''}}" bindtap="setFinishStatus" data-s="2">未达成</view>
+          </view>
+        </view>
+        <view class="field">
+          <text class="field-label">总结（可选）</text>
+          <textarea class="field-textarea" value="{{finishNote}}" placeholder="填写本次目标总结..." bindinput="onFinishNote" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-ghost"   style="flex:1;" bindtap="closeFinishModal">取消</button>
+        <button class="btn-primary" style="flex:2;" bindtap="submitFinish">提交</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,110 @@
+<view class="page">
+  <!-- 状态筛选栏 -->
+  <scroll-view scroll-x class="status-bar">
+    <view class="status-tabs">
+      <view class="tab {{activeStatus===null?'tab-active':''}}" bindtap="setStatus" data-status="null">全部</view>
+      <view class="tab {{activeStatus===0?'tab-active':''}}" bindtap="setStatus" data-status="0">待办</view>
+      <view class="tab {{activeStatus===1?'tab-active':''}}" bindtap="setStatus" data-status="1">进行中</view>
+      <view class="tab {{activeStatus===2?'tab-active':''}}" bindtap="setStatus" data-status="2">已完成</view>
+      <view class="tab {{activeStatus===3?'tab-active':''}}" bindtap="setStatus" data-status="3">已放弃</view>
+    </view>
+  </scroll-view>
+
+  <!-- 待办列表 -->
+  <view wx:if="{{loading}}" class="empty"><text>加载中...</text></view>
+  <view wx:elif="{{todos.length === 0}}" class="empty"><text>暂无待办</text></view>
+  <view wx:else class="list">
+    <view wx:for="{{todos}}" wx:key="id" class="todo-card card">
+      <view class="pri-bar" style="background:{{item.priority===1?'#FF4D4F':item.priority===3?'#52C41A':'#FAAD14'}}"></view>
+      <view class="todo-body">
+        <text class="todo-title {{item.status>=2?'done-text':''}}">{{item.title}}</text>
+        <view class="todo-meta" wx:if="{{item.dueDate || item.remindTime}}">
+          <text wx:if="{{item.dueDate}}" class="meta-chip">📅 {{item.dueDate}}</text>
+          <text wx:if="{{item.remindTime}}" class="meta-chip">🔔 提醒</text>
+        </view>
+        <text wx:if="{{item.finishNote}}" class="finish-note">✏ {{item.finishNote}}</text>
+      </view>
+      <view class="todo-actions">
+        <text wx:if="{{item.status<2}}" class="action-btn done-btn" bindtap="openFinish" data-id="{{item.id}}">完成</text>
+        <text class="action-btn" bindtap="openEdit" data-item="{{item}}">编辑</text>
+        <text class="action-btn danger" bindtap="removeTodo" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 右下角 FAB 新建按钮 -->
+  <view class="fab" bindtap="openCreate">+</view>
+
+  <!-- 新建/编辑弹窗 -->
+  <view wx:if="{{showModal}}">
+    <view class="modal-mask" bindtap="closeModal"></view>
+    <view class="modal-sheet">
+      <view class="modal-header">
+        <text class="modal-title">{{isEdit ? '编辑待办' : '新建待办'}}</text>
+        <text class="modal-close" bindtap="closeModal">✕</text>
+      </view>
+      <scroll-view scroll-y class="modal-body">
+        <view class="field">
+          <text class="field-label">标题 *</text>
+          <input class="field-input" value="{{form.title}}" placeholder="请输入任务标题" bindinput="onFormInput" data-field="title" />
+        </view>
+        <view class="field">
+          <text class="field-label">描述</text>
+          <textarea class="field-textarea" value="{{form.description}}" placeholder="可选" bindinput="onFormInput" data-field="description" />
+        </view>
+        <view class="field">
+          <text class="field-label">优先级</text>
+          <view class="priority-row">
+            <view class="pri-btn {{form.priority===1?'pri-active-1':''}}" bindtap="setPriority" data-p="1">高</view>
+            <view class="pri-btn {{form.priority===2?'pri-active-2':''}}" bindtap="setPriority" data-p="2">中</view>
+            <view class="pri-btn {{form.priority===3?'pri-active-3':''}}" bindtap="setPriority" data-p="3">低</view>
+          </view>
+        </view>
+        <view class="field">
+          <text class="field-label">截止日期</text>
+          <picker mode="date" value="{{form.dueDate}}" bindchange="onDateChange">
+            <view class="field-picker">{{form.dueDate || '选择日期'}}</view>
+          </picker>
+        </view>
+        <view class="field">
+          <text class="field-label">提醒时间</text>
+          <picker mode="dateTime" value="{{form.remindTime}}" bindchange="onRemindChange">
+            <view class="field-picker">{{form.remindTime || '选择提醒时间'}}</view>
+          </picker>
+        </view>
+      </scroll-view>
+      <view class="modal-footer">
+        <button class="btn-ghost" style="flex:1;" bindtap="closeModal">取消</button>
+        <button class="btn-primary" style="flex:2;" bindtap="submitForm">{{isEdit ? '保存' : '创建'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 完成情况弹窗 -->
+  <view wx:if="{{showFinishModal}}">
+    <view class="modal-mask" bindtap="closeFinishModal"></view>
+    <view class="modal-sheet">
+      <view class="modal-header">
+        <text class="modal-title">完成情况</text>
+        <text class="modal-close" bindtap="closeFinishModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <view class="field">
+          <text class="field-label">结果</text>
+          <view class="priority-row">
+            <view class="pri-btn {{finishStatus===2?'pri-active-3':''}}" bindtap="setFinishStatus" data-s="2">已完成</view>
+            <view class="pri-btn {{finishStatus===3?'pri-active-1':''}}" bindtap="setFinishStatus" data-s="3">已放弃</view>
+          </view>
+        </view>
+        <view class="field">
+          <text class="field-label">完成情况说明（可选）</text>
+          <textarea class="field-textarea" value="{{finishNote}}" placeholder="填写本次完成情况..." bindinput="onFinishNote" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-ghost" style="flex:1;" bindtap="closeFinishModal">取消</button>
+        <button class="btn-primary" style="flex:2;" bindtap="submitFinish">提交</button>
+      </view>
+    </view>
+  </view>
+</view>

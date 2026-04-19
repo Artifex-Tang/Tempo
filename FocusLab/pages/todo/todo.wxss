@@ -1,0 +1,38 @@
+.page { padding: 0 24rpx 160rpx; }
+
+.status-bar { white-space: nowrap; padding: 20rpx 0; }
+.status-tabs { display: inline-flex; gap: 16rpx; padding-right: 8rpx; }
+.tab { display: inline-block; padding: 12rpx 28rpx; border-radius: 40rpx; font-size: 26rpx; color: var(--color-text-sub); background: var(--color-card); box-shadow: var(--shadow-card); }
+.tab-active { background: var(--color-primary); color: #fff; }
+
+.list { padding-top: 4rpx; }
+.todo-card { display: flex; align-items: stretch; padding: 0; overflow: hidden; }
+.pri-bar { width: 8rpx; flex-shrink: 0; }
+.todo-body { flex: 1; padding: 20rpx 16rpx; min-width: 0; }
+.todo-title { font-size: 28rpx; color: var(--color-text); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.done-text { text-decoration: line-through; color: var(--color-text-sub); }
+.todo-meta { display: flex; gap: 12rpx; margin-top: 8rpx; flex-wrap: wrap; }
+.meta-chip { font-size: 22rpx; color: var(--color-text-sub); background: var(--color-bg); padding: 4rpx 10rpx; border-radius: 4rpx; }
+.finish-note { font-size: 22rpx; color: var(--color-text-sub); display: block; margin-top: 6rpx; }
+
+.todo-actions { display: flex; flex-direction: column; justify-content: center; gap: 8rpx; padding: 12rpx 16rpx 12rpx 0; flex-shrink: 0; }
+.action-btn { font-size: 22rpx; color: var(--color-primary); padding: 6rpx 12rpx; border-radius: 6rpx; background: #EEF4FF; text-align: center; min-width: 60rpx; }
+.done-btn { color: var(--color-success); background: #F6FFED; }
+.action-btn.danger { color: var(--color-danger); background: #FFF1F0; }
+
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(120rpx + env(safe-area-inset-bottom));
+  width: 100rpx; height: 100rpx;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 60rpx;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(26,115,232,0.4);
+  z-index: 50;
+}
+
+.modal-title { font-size: 32rpx; font-weight: bold; }
+.modal-close { font-size: 36rpx; color: var(--color-text-sub); padding: 8rpx; }

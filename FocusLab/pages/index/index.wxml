@@ -1,0 +1,83 @@
+<view class="page">
+  <!-- 顶部用户信息 -->
+  <view class="header card">
+    <view class="user-row">
+      <image class="avatar" src="{{userInfo.avatarUrl || ''}}" mode="aspectFill" />
+      <view class="greeting">
+        <text class="nickname">{{userInfo.nickName || '朋友'}}，你好 👋</text>
+        <text class="date">{{date}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 本周统计（有数据才显示） -->
+  <view wx:if="{{weeklyStat}}" class="card stat-card">
+    <text class="section-title">本周概览</text>
+    <view class="stat-row">
+      <view class="stat-item">
+        <text class="stat-num">{{weeklyStat.todoDone}}/{{weeklyStat.todoTotal}}</text>
+        <text class="stat-label">完成任务</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{weeklyStat.focusTotalMin}}</text>
+        <text class="stat-label">专注分钟</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{weeklyStat.goalDone}}/{{weeklyStat.goalTotal}}</text>
+        <text class="stat-label">目标达成</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日待办 -->
+  <view class="section-header">
+    <text class="section-title">今日待办</text>
+    <text class="link" bindtap="goToTodo">查看全部 ›</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="empty">
+    <text>加载中...</text>
+  </view>
+  <view wx:elif="{{todayTodos.length === 0}}" class="empty card">
+    <text>今天没有待办任务 🎉</text>
+    <button class="btn-primary" style="margin-top:20rpx;font-size:26rpx;padding:16rpx 32rpx;" bindtap="goToTodo">去添加</button>
+  </view>
+  <view wx:else>
+    <view wx:for="{{todayTodos}}" wx:key="id" class="todo-item card">
+      <view class="todo-check" bindtap="quickDone" data-id="{{item.id}}">
+        <view class="check-circle {{item.status === 2 ? 'checked' : ''}}">
+          <text wx:if="{{item.status === 2}}">✓</text>
+        </view>
+      </view>
+      <view class="todo-content">
+        <text class="todo-title {{item.status >= 2 ? 'done-text' : ''}}">{{item.title}}</text>
+        <view class="todo-meta">
+          <text wx:if="{{item.dueDate}}" class="meta-text">{{item.dueDate}}</text>
+          <view class="pri-dot" style="background:{{item.priority===1?'#FF4D4F':item.priority===3?'#52C41A':'#FAAD14'}}"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="quick-grid">
+    <view class="quick-item" bindtap="goToTodo">
+      <text class="quick-icon">📝</text>
+      <text class="quick-label">待办</text>
+    </view>
+    <view class="quick-item" bindtap="goToFocus">
+      <text class="quick-icon">⏱</text>
+      <text class="quick-label">专注</text>
+    </view>
+    <view class="quick-item" bindtap="goToGoal">
+      <text class="quick-icon">🎯</text>
+      <text class="quick-label">目标</text>
+    </view>
+    <view class="quick-item" bindtap="goToCategory">
+      <text class="quick-icon">🏷</text>
+      <text class="quick-label">分类</text>
+    </view>
+  </view>
+</view>

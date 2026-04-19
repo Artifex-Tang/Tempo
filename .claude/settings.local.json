@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"D:/CCode/Tempo/DayCraft/src/main/java/com/tempo/daycraft/common/result\")",
+      "Bash(mkdir -p \"D:/CCode/Tempo/DayCraft/src/main/java/com/tempo/daycraft/common/exception\")",
+      "Bash(mkdir -p \"D:/CCode/Tempo/DayCraft/src/main/java/com/tempo/daycraft/config\")",
+      "Bash(mkdir -p \"D:/CCode/Tempo/DayCraft/src/main/java/com/tempo/daycraft/interceptor\")",
+      "Bash(mkdir -p \"D:/CCode/Tempo/DayCraft/src/main/java/com/tempo/daycraft/util\")"
+    ]
+  }
+}

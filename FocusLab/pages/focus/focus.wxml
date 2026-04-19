@@ -1,0 +1,72 @@
+<view class="page">
+  <!-- 圆环计时器 -->
+  <view class="ring-wrap">
+    <view class="progress-ring" style="--p:{{progress}};">
+      <view class="ring-inner">
+        <text class="time-display">{{timeDisplay}}</text>
+        <text class="phase-text">
+          {{phase==='idle'?'准备好了吗':phase==='running'?'专注中':phase==='paused'?'已暂停':'完成！'}}
+        </text>
+        <text wx:if="{{linkedTitle}}" class="linked-title">{{linkedTitle}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预设时长选择（仅 idle） -->
+  <view wx:if="{{phase==='idle'}}" class="presets">
+    <view wx:for="{{presets}}" wx:key="*this"
+          class="preset-btn {{selectedMin===item?'preset-active':''}}"
+          bindtap="selectPreset" data-min="{{item}}">
+      {{item}}分
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button wx:if="{{phase==='idle'}}"    class="btn-primary ctrl-btn" bindtap="startFocus">开始专注</button>
+    <button wx:if="{{phase==='running'}}" class="btn-ghost   ctrl-btn" bindtap="pauseFocus">暂 停</button>
+    <view   wx:if="{{phase==='paused'}}"  class="ctrl-row">
+      <button class="btn-ghost   ctrl-btn-half" bindtap="endFocus">结束</button>
+      <button class="btn-primary ctrl-btn-half" bindtap="resumeFocus">继续</button>
+    </view>
+  </view>
+
+  <!-- 关联待办（仅 idle，有待办时显示） -->
+  <view wx:if="{{phase==='idle' && todos.length > 0}}" class="link-section">
+    <text class="link-title">关联待办</text>
+    <scroll-view scroll-y style="max-height:280rpx;">
+      <view wx:for="{{todos}}" wx:key="id"
+            class="link-item {{linkedTodoId===item.id?'link-active':''}}"
+            bindtap="linkTodo" data-id="{{item.id}}" data-title="{{item.title}}">
+        <text>{{item.title}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 今日专注统计 -->
+  <view class="card today-stat">
+    <text class="stat-label-sm">今日已专注</text>
+    <text class="stat-val">{{todayMin}} 分钟</text>
+  </view>
+
+  <!-- 完成弹窗 -->
+  <view wx:if="{{showDoneModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-sheet">
+      <view class="modal-header">
+        <text class="modal-title">🎉 专注完成</text>
+      </view>
+      <view class="modal-body">
+        <text class="done-duration">本次专注 {{selectedMin}} 分钟</text>
+        <view class="field" style="margin-top:24rpx;">
+          <text class="field-label">备注（可选）</text>
+          <textarea class="field-textarea" value="{{doneNote}}" placeholder="记录一下本次专注..." bindinput="onDoneNote" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-ghost"   style="flex:1;" bindtap="skipSave">跳过</button>
+        <button class="btn-primary" style="flex:2;" bindtap="saveFocus">保存记录</button>
+      </view>
+    </view>
+  </view>
+</view>

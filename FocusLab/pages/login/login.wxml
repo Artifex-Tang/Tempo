@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="logo-area">
+    <view class="logo-icon">⏱</view>
+    <text class="app-name">FocusLab</text>
+    <text class="app-subtitle">专注 · 计划 · 成长</text>
+  </view>
+
+  <view class="action-area">
+    <button class="login-btn" loading="{{loading}}" bindtap="handleLogin">
+      微信一键登录
+    </button>
+    <text class="privacy-tip">登录即代表您同意用户协议和隐私政策</text>
+  </view>
+</view>

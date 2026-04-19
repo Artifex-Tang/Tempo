@@ -1,0 +1,73 @@
+<view class="page">
+  <!-- Tab 切换 -->
+  <view class="tab-wrap">
+    <view class="tab-item {{tab==='weekly'?'tab-active':''}}" bindtap="switchTab" data-tab="weekly">本周</view>
+    <view class="tab-item {{tab==='monthly'?'tab-active':''}}" bindtap="switchTab" data-tab="monthly">本月</view>
+  </view>
+
+  <!-- 本周内容 -->
+  <block wx:if="{{tab==='weekly'}}">
+    <view wx:if="{{weekly}}" class="summary-content">
+      <text class="period-label">{{weekly.periodStart}} ~ {{weekly.periodEnd}}</text>
+      <view class="metrics-grid">
+        <view class="metric-item card">
+          <text class="metric-val">{{weekly.todoDone}}/{{weekly.todoTotal}}</text>
+          <text class="metric-label">完成待办</text>
+          <view class="mini-bar">
+            <view class="mini-fill" style="width:{{weekly.todoTotal?(weekly.todoDone/weekly.todoTotal*100):0}}%"></view>
+          </view>
+        </view>
+        <view class="metric-item card">
+          <text class="metric-val">{{weekly.focusTotalMin}}</text>
+          <text class="metric-label">专注分钟</text>
+        </view>
+        <view class="metric-item card">
+          <text class="metric-val">{{weekly.goalDone}}/{{weekly.goalTotal}}</text>
+          <text class="metric-label">目标达成</text>
+        </view>
+      </view>
+      <view wx:if="{{weekly.aiSummary}}" class="card ai-card">
+        <text class="ai-title">📊 本期总结</text>
+        <text class="ai-text">{{weekly.aiSummary}}</text>
+      </view>
+      <button class="btn-ghost regen-btn" loading="{{generating}}" bindtap="generate">重新生成汇总</button>
+    </view>
+    <view wx:else class="empty card">
+      <text>本周暂无汇总数据</text>
+      <button class="btn-primary" style="margin-top:24rpx;" loading="{{generating}}" bindtap="generate">生成本周汇总</button>
+    </view>
+  </block>
+
+  <!-- 本月内容 -->
+  <block wx:if="{{tab==='monthly'}}">
+    <view wx:if="{{monthly}}" class="summary-content">
+      <text class="period-label">{{monthly.periodStart}} ~ {{monthly.periodEnd}}</text>
+      <view class="metrics-grid">
+        <view class="metric-item card">
+          <text class="metric-val">{{monthly.todoDone}}/{{monthly.todoTotal}}</text>
+          <text class="metric-label">完成待办</text>
+          <view class="mini-bar">
+            <view class="mini-fill" style="width:{{monthly.todoTotal?(monthly.todoDone/monthly.todoTotal*100):0}}%"></view>
+          </view>
+        </view>
+        <view class="metric-item card">
+          <text class="metric-val">{{monthly.focusTotalMin}}</text>
+          <text class="metric-label">专注分钟</text>
+        </view>
+        <view class="metric-item card">
+          <text class="metric-val">{{monthly.goalDone}}/{{monthly.goalTotal}}</text>
+          <text class="metric-label">目标达成</text>
+        </view>
+      </view>
+      <view wx:if="{{monthly.aiSummary}}" class="card ai-card">
+        <text class="ai-title">📊 本期总结</text>
+        <text class="ai-text">{{monthly.aiSummary}}</text>
+      </view>
+      <button class="btn-ghost regen-btn" loading="{{generating}}" bindtap="generate">重新生成汇总</button>
+    </view>
+    <view wx:else class="empty card">
+      <text>本月暂无汇总数据</text>
+      <button class="btn-primary" style="margin-top:24rpx;" loading="{{generating}}" bindtap="generate">生成本月汇总</button>
+    </view>
+  </block>
+</view>

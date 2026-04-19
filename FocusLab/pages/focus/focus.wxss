@@ -1,0 +1,99 @@
+.page {
+  padding: 40rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 圆环 */
+.ring-wrap { margin: 20rpx 0 40rpx; }
+
+.progress-ring {
+  width: 480rpx;
+  height: 480rpx;
+  border-radius: 50%;
+  /* CSS conic-gradient 实现进度环，--p 由 JS 通过内联 style 注入 */
+  background: conic-gradient(
+    var(--color-primary) calc(var(--p, 0) * 1%),
+    #EEEEEE 0
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-inner {
+  width: 400rpx;
+  height: 400rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+}
+
+.time-display {
+  font-size: 80rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  letter-spacing: 4rpx;
+  font-variant-numeric: tabular-nums;
+}
+
+.phase-text { font-size: 26rpx; color: var(--color-text-sub); }
+
+.linked-title {
+  font-size: 22rpx;
+  color: var(--color-primary);
+  max-width: 320rpx;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 预设按钮 */
+.presets { display: flex; gap: 20rpx; margin-bottom: 32rpx; }
+.preset-btn {
+  padding: 16rpx 28rpx;
+  border-radius: 40rpx;
+  border: 2rpx solid var(--color-border);
+  font-size: 26rpx;
+  color: var(--color-text-sub);
+  background: var(--color-card);
+}
+.preset-active { border-color: var(--color-primary); color: var(--color-primary); background: #EEF4FF; }
+
+/* 控制按钮 */
+.controls { width: 100%; margin-bottom: 32rpx; }
+.ctrl-btn { width: 100%; font-size: 32rpx; padding: 28rpx 0; }
+.ctrl-row { display: flex; gap: 20rpx; }
+.ctrl-btn-half { flex: 1; font-size: 30rpx; padding: 24rpx 0; }
+
+/* 关联待办 */
+.link-section { width: 100%; margin-bottom: 24rpx; }
+.link-title { font-size: 26rpx; font-weight: bold; color: var(--color-text); display: block; margin-bottom: 16rpx; }
+.link-item {
+  padding: 20rpx 24rpx;
+  border-radius: 8rpx;
+  background: var(--color-card);
+  margin-bottom: 12rpx;
+  font-size: 26rpx;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.link-active { background: #EEF4FF; color: var(--color-primary); }
+
+/* 今日统计 */
+.today-stat { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+.stat-label-sm { font-size: 26rpx; color: var(--color-text-sub); }
+.stat-val { font-size: 36rpx; font-weight: bold; color: var(--color-primary); }
+
+/* 完成弹窗 */
+.done-duration { font-size: 40rpx; font-weight: bold; color: var(--color-primary); text-align: center; display: block; }
+.modal-title { font-size: 32rpx; font-weight: bold; }
