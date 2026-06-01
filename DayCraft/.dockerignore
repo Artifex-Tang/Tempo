@@ -1,4 +1,6 @@
-target/
 .git/
 .idea/
 *.md
+target/classes/
+target/test-classes/
+target/surefire-reports/

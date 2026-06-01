@@ -28,11 +28,19 @@ public class WxApiUtil {
     @Value("${tempo.wx.subscribe-template-id:}")
     private String templateId;
 
+    // dev 测试用：设置此值后 getOpenid 直接返回，跳过真实微信接口
+    @Value("${tempo.wx.mock-openid:}")
+    private String mockOpenid;
+
     /**
      * 通过 wx.login() 返回的 code 换取 openid
      * 失败时抛 BusinessException(WX_LOGIN_FAIL)
      */
     public String getOpenid(String code) {
+        if (mockOpenid != null && !mockOpenid.isEmpty()) {
+            log.warn("[DEV] mock-openid 已启用，返回固定 openid: {}", mockOpenid);
+            return mockOpenid;
+        }
         String url = jscode2sessionUrl
                 + "?appid=" + appid
                 + "&secret=" + secret

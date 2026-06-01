@@ -1,0 +1,17 @@
+tempo:
+  jwt:
+    secret: ${JWT_SECRET:tempo-dev-secret-change-in-prod-use-32chars}
+    expire: 604800        # 7天，单位秒
+  wx:
+    appid: ${WX_APPID:your_appid}
+    secret: ${WX_SECRET:your_secret}
+    subscribe-template-id: ${WX_TEMPLATE_ID:}
+    jscode2session-url: https://api.weixin.qq.com/sns/jscode2session
+    mock-openid: ${WX_MOCK_OPENID:}
+  cors:
+    allowed-origins: "http://localhost:3000,http://localhost:8081"
+  ai:
+    enabled: ${AI_ENABLED:false}
+    api-key: ${AI_API_KEY:}
+    api-url: ${AI_API_URL:https://api.deepseek.com/v1/chat/completions}
+    model: deepseek-chat

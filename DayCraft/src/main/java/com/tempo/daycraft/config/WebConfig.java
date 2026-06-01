@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AuthInterceptor authInterceptor;
 
-    @Value("${tempo.cors.allowed-origins}")
+    @Value("${tempo.cors.allowed-origins:http://localhost:3000,http://localhost:8081}")
     private List<String> allowedOrigins;
 
     @Override

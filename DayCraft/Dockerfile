@@ -1,10 +1,3 @@
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
-WORKDIR /build
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-COPY src ./src
-RUN mvn clean package -DskipTests -B
-
 FROM eclipse-temurin:17-jre-alpine AS runner
 RUN apk add --no-cache tzdata && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
@@ -12,7 +5,7 @@ RUN apk add --no-cache tzdata && \
     apk del tzdata
 RUN addgroup -S tempo && adduser -S tempo -G tempo
 WORKDIR /app
-COPY --from=builder /build/target/*.jar app.jar
+COPY target/*.jar app.jar
 RUN chown tempo:tempo app.jar
 USER tempo
 EXPOSE 8080

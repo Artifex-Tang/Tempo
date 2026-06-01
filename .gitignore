@@ -1,0 +1,21 @@
+# Env secrets
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# FocusLab
+FocusLab/node_modules/
+FocusLab/coverage/
+FocusLab/project.config.json
+FocusLab/project.private.config.json
+FocusLab/miniprogram_npm/
+
+# DayCraft build
+DayCraft/target/

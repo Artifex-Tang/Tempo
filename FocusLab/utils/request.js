@@ -1,14 +1,24 @@
 // 统一网络请求层：只处理 HTTP 协议（token注入、错误提示、401跳转）
 // 页面禁止直接调用 wx.request，统一通过此模块
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://localhost:8081';
+
+function filterNulls(obj) {
+  if (!obj || typeof obj !== 'object') return obj;
+  const out = {};
+  Object.keys(obj).forEach(k => { if (obj[k] != null) out[k] = obj[k]; });
+  return out;
+}
 
 function request(url, method, data, silent) {
+  const m = method || 'GET';
+  // For GET requests, strip null/undefined params so Spring doesn't get "?status=null"
+  const cleanData = m === 'GET' ? filterNulls(data) : (data || {});
   return new Promise((resolve, reject) => {
     const token = wx.getStorageSync('token');
     wx.request({
       url: BASE_URL + url,
-      method: method || 'GET',
-      data: data || {},
+      method: m,
+      data: cleanData,
       header: {
         'Content-Type': 'application/json',
         'Authorization': token ? 'Bearer ' + token : ''
