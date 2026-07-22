@@ -36,4 +36,9 @@ describe('api client', () => {
     });
     await expect(request('/api/todos/9', 'GET')).rejects.toThrow('待办不存在');
   });
+
+  it('throws friendly error on network failure', async () => {
+    (global.fetch as ReturnType<typeof vi.fn>).mockRejectedValue(new TypeError('Failed to fetch'));
+    await expect(request('/api/todos/today', 'GET')).rejects.toThrow('网络异常，请重试');
+  });
 });

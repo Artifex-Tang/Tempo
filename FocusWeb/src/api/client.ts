@@ -29,14 +29,20 @@ export async function request<T = unknown>(
   }
 
   const token = getToken();
-  const resp = await fetch(finalUrl, {
-    method: m,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body,
-  });
+  // fetch 本身 reject（离线 / DNS 失败 / 中断）单独捕获，对齐 FocusLab request.js 的 fail: 分支
+  let resp: Response;
+  try {
+    resp = await fetch(finalUrl, {
+      method: m,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body,
+    });
+  } catch {
+    throw new Error('网络异常，请重试');
+  }
 
   let payload: R<T>;
   try {
