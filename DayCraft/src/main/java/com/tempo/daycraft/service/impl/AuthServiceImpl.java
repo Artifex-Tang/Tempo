@@ -23,24 +23,37 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginVO login(LoginDTO dto) {
         String openid = wxApiUtil.getOpenid(dto.getCode());
+        return loginByOpenid(openid, dto.getNickname(), dto.getAvatarUrl());
+    }
 
+    @Override
+    public LoginVO loginWebMock() {
+        String openid = wxApiUtil.getOpenid("web-mock");
+        return loginByOpenid(openid, "Web 测试用户", null);
+    }
+
+    @Override
+    public LoginVO loginWebOAuth(String code) {
+        String openid = wxApiUtil.getOpenidByWebCode(code);
+        return loginByOpenid(openid, null, null);
+    }
+
+    private LoginVO loginByOpenid(String openid, String nickname, String avatarUrl) {
         User user = userMapper.selectOne(
                 new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
 
         boolean isNew = false;
         if (user == null) {
-            // 首次登录，创建用户
             user = new User();
             user.setOpenid(openid);
-            user.setNickname(dto.getNickname());
-            user.setAvatarUrl(dto.getAvatarUrl());
+            user.setNickname(nickname);
+            user.setAvatarUrl(avatarUrl);
             user.setFocusTotal(0);
             userMapper.insert(user);
             isNew = true;
-        } else if (StringUtils.hasText(dto.getNickname()) || StringUtils.hasText(dto.getAvatarUrl())) {
-            // 更新昵称/头像
-            if (StringUtils.hasText(dto.getNickname())) user.setNickname(dto.getNickname());
-            if (StringUtils.hasText(dto.getAvatarUrl())) user.setAvatarUrl(dto.getAvatarUrl());
+        } else if (StringUtils.hasText(nickname) || StringUtils.hasText(avatarUrl)) {
+            if (StringUtils.hasText(nickname)) user.setNickname(nickname);
+            if (StringUtils.hasText(avatarUrl)) user.setAvatarUrl(avatarUrl);
             userMapper.updateById(user);
         }
 

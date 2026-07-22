@@ -32,6 +32,11 @@ public class WxApiUtil {
     @Value("${tempo.wx.mock-openid:}")
     private String mockOpenid;
 
+    /** 占位：Task 2 实现真实网页 OAuth 逻辑。 */
+    public String getOpenidByWebCode(String code) {
+        throw new UnsupportedOperationException("Task 2 实现");
+    }
+
     /**
      * 通过 wx.login() 返回的 code 换取 openid
      * 失败时抛 BusinessException(WX_LOGIN_FAIL)
