@@ -19,3 +19,6 @@ FocusLab/miniprogram_npm/
 
 # DayCraft build
 DayCraft/target/
+
+# Visual companion mockups
+.superpowers/
