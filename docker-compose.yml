@@ -80,6 +80,18 @@ services:
     networks:
       - tempo-net
 
+  web:
+    build:
+      context: ./FocusWeb
+    container_name: tempo-web
+    ports:
+      - "80:80"
+    depends_on:
+      - daycraft
+    restart: unless-stopped
+    networks:
+      - tempo-net
+
 volumes:
   mysql_data:
   redis_data:
