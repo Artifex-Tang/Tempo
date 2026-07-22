@@ -22,7 +22,6 @@ export interface Todo {
   dueDate?: string;
   remindTime?: string;
   categoryId?: number;
-  categoryName?: string;
   finishNote?: string;
   createdAt?: string;
 }
@@ -34,7 +33,7 @@ export interface Goal {
   status: number;
   progress: number;
   finishNote?: string;
-  deadline?: string;
+  targetDate?: string;
 }
 
 export interface Category {
@@ -51,11 +50,11 @@ export interface Summary {
   type?: number;
   periodStart?: string;
   periodEnd?: string;
-  todoTotal: number;
-  todoDone: number;
-  focusTotalMin: number;
-  goalTotal: number;
-  goalDone: number;
+  todoTotal?: number;
+  todoDone?: number;
+  focusTotalMin?: number;
+  goalTotal?: number;
+  goalDone?: number;
   aiSummary?: string;
   createdAt?: string;
 }

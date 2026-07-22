@@ -20,7 +20,10 @@ export function LoginPage() {
     if (!code || IS_DEV) return;
     auth.webOAuthCallback(code)
       .then((vo) => { saveLogin(vo); nav('/today'); })
-      .catch(() => message.error('微信登录失败'));
+      .catch(() => {
+        message.error('微信登录失败');
+        nav('/login', { replace: true }); // 清掉已用的 code，避免刷新重复失败
+      });
   }, [params, nav]);
 
   const onMockLogin = async () => {

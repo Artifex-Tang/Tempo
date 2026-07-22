@@ -49,7 +49,7 @@ export function SummaryPage() {
   if (loading) return <Skeleton active />;
 
   const s = (tab === 'weekly' ? weekly : monthly) as Summary | null;
-  const rate = s && s.todoTotal ? Math.round((s.todoDone / s.todoTotal) * 100) : 0;
+  const rate = s && s.todoTotal ? Math.round(((s.todoDone ?? 0) / s.todoTotal) * 100) : 0;
 
   return (
     <>

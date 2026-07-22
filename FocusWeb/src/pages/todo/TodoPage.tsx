@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Space, Popconfirm, message, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { todo as todoApi } from '../../api';
+import { todo as todoApi, category as catApi } from '../../api';
 import type { Todo } from '../../types';
 
 export function TodoPage() {
   const [items, setItems] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<number[]>([]);
+  const [catMap, setCatMap] = useState<Record<number, string>>({});
 
   const load = async () => {
     setLoading(true);
@@ -21,15 +22,25 @@ export function TodoPage() {
     load();
   }, []);
 
+  // 分类列表只加载一次，用于把 categoryId 映射为名称展示
+  useEffect(() => {
+    catApi
+      .list()
+      .then((cs) => setCatMap(Object.fromEntries(cs.map((c) => [c.id, c.name]))))
+      .catch(() => {});
+  }, []);
+
   const batchFinish = async () => {
-    await Promise.all(selected.map((id) => todoApi.finish(id, 1)));
-    message.success(`完成 ${selected.length} 项`);
+    const results = await Promise.allSettled(selected.map((id) => todoApi.finish(id, 1)));
+    const failed = results.filter((r) => r.status === 'rejected').length;
+    message.success(`完成 ${selected.length - failed} 项${failed ? `，${failed} 项失败` : ''}`);
     setSelected([]);
     load();
   };
   const batchDelete = async () => {
-    await Promise.all(selected.map((id) => todoApi.remove(id)));
-    message.success(`删除 ${selected.length} 项`);
+    const results = await Promise.allSettled(selected.map((id) => todoApi.remove(id)));
+    const failed = results.filter((r) => r.status === 'rejected').length;
+    message.success(`删除 ${selected.length - failed} 项${failed ? `，${failed} 项失败` : ''}`);
     setSelected([]);
     load();
   };
@@ -42,7 +53,7 @@ export function TodoPage() {
       render: (s: number) =>
         s === 1 ? <Tag color="green">已完成</Tag> : <Tag>待办</Tag>,
     },
-    { title: '分类', dataIndex: 'categoryName' },
+    { title: '分类', render: (_, r) => (r.categoryId ? catMap[r.categoryId] ?? '' : '') },
     {
       title: '操作',
       render: (_, r) => (
