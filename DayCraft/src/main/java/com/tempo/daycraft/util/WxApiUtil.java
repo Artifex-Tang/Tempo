@@ -25,6 +25,9 @@ public class WxApiUtil {
     @Value("${tempo.wx.jscode2session-url}")
     private String jscode2sessionUrl;
 
+    @Value("${tempo.wx.web-oauth-url:https://api.weixin.qq.com/sns/oauth2/access_token}")
+    private String webOauthUrl;
+
     @Value("${tempo.wx.subscribe-template-id:}")
     private String templateId;
 
@@ -32,9 +35,39 @@ public class WxApiUtil {
     @Value("${tempo.wx.mock-openid:}")
     private String mockOpenid;
 
-    /** 占位：Task 2 实现真实网页 OAuth 逻辑。 */
+    /**
+     * 微信网页 OAuth：用授权 code 换 openid（sns/oauth2/access_token）。
+     * mock-openid 启用时直接返回，便于本地开发。失败抛 BusinessException(WX_LOGIN_FAIL)。
+     */
     public String getOpenidByWebCode(String code) {
-        throw new UnsupportedOperationException("Task 2 实现");
+        if (mockOpenid != null && !mockOpenid.isEmpty()) {
+            log.warn("[DEV] mock-openid 已启用，web OAuth 直接返回: {}", mockOpenid);
+            return mockOpenid;
+        }
+        String url = webOauthUrl
+                + "?appid=" + appid
+                + "&secret=" + secret
+                + "&code=" + code
+                + "&grant_type=authorization_code";
+        try {
+            String body = HttpUtil.get(url);
+            JSONObject json = JSONUtil.parseObj(body);
+            if (json.containsKey("errcode") && json.getInt("errcode") != 0) {
+                log.warn("微信网页 oauth2 返回错误: {}", body);
+                throw new BusinessException(ResultCode.WX_LOGIN_FAIL);
+            }
+            String openid = json.getStr("openid");
+            if (openid == null || openid.isEmpty()) {
+                log.warn("微信网页 oauth2 未返回 openid: {}", body);
+                throw new BusinessException(ResultCode.WX_LOGIN_FAIL);
+            }
+            return openid;
+        } catch (BusinessException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("调用微信网页 oauth2 接口异常", e);
+            throw new BusinessException(ResultCode.WX_LOGIN_FAIL);
+        }
     }
 
     /**
