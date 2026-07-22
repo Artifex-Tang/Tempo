@@ -19,6 +19,7 @@ export interface Todo {
   id: number;
   title: string;
   status: number;
+  dueDate?: string;
   remindTime?: string;
   categoryId?: number;
   categoryName?: string;

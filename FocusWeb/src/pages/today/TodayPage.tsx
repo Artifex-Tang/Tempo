@@ -21,7 +21,10 @@ export function TodayPage() {
   const onAdd = async () => {
     const title = draft.trim();
     if (!title) return;
-    await todoApi.create({ title });
+    // 今日页新建的待办默认 dueDate=今日，否则后端 todayList 过滤（dueDate=today OR 超期 OR status=1）匹配不到，导致刚创建就"消失"
+    const d = new Date();
+    const dueDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    await todoApi.create({ title, dueDate });
     setDraft('');
     load();
   };
