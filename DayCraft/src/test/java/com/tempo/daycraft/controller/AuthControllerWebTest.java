@@ -66,6 +66,17 @@ class AuthControllerWebTest {
                 .andExpect(jsonPath("$.data.token").value("jwt-oauth"));
     }
 
+    @Test
+    void webOAuthCallback_returns400_whenCodeBlank() throws Exception {
+        // 项目 GlobalExceptionHandler 将 @Valid 校验失败统一包装成 R<T>（HTTP 200 + body.code=400 PARAM_ERROR），
+        // 因此这里断言响应体 code=400，而不是 HTTP 400。code 为空时不应进入 service。
+        mvc.perform(post("/api/auth/web-oauth/callback")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsBytes(new AuthControllerWebTest.WebOAuthPayload(""))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400));
+    }
+
     // 测试用 payload（结构对齐 WebOAuthDTO）
     static record WebOAuthPayload(String code) {}
 }

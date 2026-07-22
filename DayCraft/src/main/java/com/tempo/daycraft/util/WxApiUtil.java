@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +49,7 @@ public class WxApiUtil {
         String url = webOauthUrl
                 + "?appid=" + appid
                 + "&secret=" + secret
-                + "&code=" + code
+                + "&code=" + URLEncoder.encode(code, StandardCharsets.UTF_8)
                 + "&grant_type=authorization_code";
         try {
             String body = HttpUtil.get(url);
@@ -82,7 +84,7 @@ public class WxApiUtil {
         String url = jscode2sessionUrl
                 + "?appid=" + appid
                 + "&secret=" + secret
-                + "&js_code=" + code
+                + "&js_code=" + URLEncoder.encode(code, StandardCharsets.UTF_8)
                 + "&grant_type=authorization_code";
         try {
             String body = HttpUtil.get(url);
