@@ -1,6 +1,7 @@
 package com.tempo.daycraft.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.tempo.daycraft.common.exception.BusinessException;
 import com.tempo.daycraft.dto.LoginDTO;
 import com.tempo.daycraft.entity.User;
 import com.tempo.daycraft.mapper.UserMapper;
@@ -28,6 +29,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginVO loginWebMock() {
+        // 显式拒绝：生产环境 WX_MOCK_OPENID 必须留空，此处直接拒绝，避免浪费微信接口调用
+        if (!wxApiUtil.isMockOpenidEnabled()) {
+            throw new BusinessException("Web mock 登录未启用（需配置 WX_MOCK_OPENID）");
+        }
         String openid = wxApiUtil.getOpenid("web-mock");
         return loginByOpenid(openid, "Web 测试用户", null);
     }

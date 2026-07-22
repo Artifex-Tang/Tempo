@@ -37,6 +37,11 @@ public class WxApiUtil {
     @Value("${tempo.wx.mock-openid:}")
     private String mockOpenid;
 
+    /** 开发旁路是否启用（WX_MOCK_OPENID 非空） */
+    public boolean isMockOpenidEnabled() {
+        return mockOpenid != null && !mockOpenid.isEmpty();
+    }
+
     /**
      * 微信网页 OAuth：用授权 code 换 openid（sns/oauth2/access_token）。
      * mock-openid 启用时直接返回，便于本地开发。失败抛 BusinessException(WX_LOGIN_FAIL)。
