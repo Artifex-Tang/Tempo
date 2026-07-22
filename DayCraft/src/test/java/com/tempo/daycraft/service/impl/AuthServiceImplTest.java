@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,5 +54,23 @@ class AuthServiceImplTest {
         assertThat(vo.getUserId()).isEqualTo(7L);
         assertThat(vo.getToken()).isEqualTo("jwt-7");
         assertThat(vo.isNew()).isFalse();
+    }
+
+    @Test
+    void login_updatesProfile_whenExistingUserAndNicknameProvided() {
+        when(wxApiUtil.getOpenid("web-mock")).thenReturn("mock-openid-xyz");
+        User existing = new User();
+        existing.setId(9L);
+        existing.setOpenid("mock-openid-xyz");
+        existing.setNickname("旧昵称");
+        when(userMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(existing);
+        when(jwtUtil.generateToken(9L)).thenReturn("jwt-9");
+
+        LoginVO vo = authService.loginWebMock();
+
+        verify(userMapper, never()).insert(any(User.class));
+        verify(userMapper).updateById(argThat(u -> "Web 测试用户".equals(u.getNickname())));
+        assertThat(vo.isNew()).isFalse();
+        assertThat(vo.getUserId()).isEqualTo(9L);
     }
 }

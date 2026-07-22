@@ -38,6 +38,9 @@ public class AuthServiceImpl implements AuthService {
         return loginByOpenid(openid, null, null);
     }
 
+    /**
+     * 按 openid 查/建用户并签发 JWT。小程序与 Web 共用此逻辑，保证同 openid = 同一用户/同一份数据。
+     */
     private LoginVO loginByOpenid(String openid, String nickname, String avatarUrl) {
         User user = userMapper.selectOne(
                 new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
