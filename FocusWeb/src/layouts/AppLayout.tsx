@@ -5,6 +5,7 @@ import {
 } from '@ant-design/icons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 const { Sider, Content, Header } = Layout;
 
@@ -27,6 +28,8 @@ export function AppLayout() {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  useKeyboardShortcuts();
 
   const activeKey = '/' + loc.pathname.split('/')[1];
 
