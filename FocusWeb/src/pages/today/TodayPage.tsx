@@ -48,7 +48,6 @@ export function TodayPage() {
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         enterButton="添加"
-        onPressEnter={onAdd}
         onSearch={onAdd}
         style={{ marginBottom: 12 }}
       />
