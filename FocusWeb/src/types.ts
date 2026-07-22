@@ -48,12 +48,7 @@ export interface Category {
   color?: string;
 }
 
-export interface DailyStat {
-  date: string;
-  total: number;
-  done: number;
-  focusMinutes: number;
-}
+export interface DailyStat { day: string; totalMin: number; }
 
 export interface Summary {
   type: string;

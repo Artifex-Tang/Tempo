@@ -37,8 +37,7 @@ export const goal = {
 };
 
 export const focus = {
-  // 注意：record 入参用内联类型而非 FocusRecord，与 FocusLab api.js 保持一致
-  record: (data: { duration: number; categoryId?: number; startedAt: string }) =>
+  record: (data: { durationMin: number; todoId?: number; goalId?: number; note?: string }) =>
     post('/api/focus/record', data),
   dailyStats: (days: number) => get<DailyStat[]>('/api/focus/daily-stats', { days }),
 };

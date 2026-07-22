@@ -30,10 +30,7 @@ export function FocusPage() {
           clearInterval(timer.current!);
           setRunning(false);
           focusApi
-            .record({
-              duration: POMODORO * 60,
-              startedAt: new Date(Date.now() - POMODORO * 1000).toISOString(),
-            })
+            .record({ durationMin: Math.round(POMODORO / 60) })
             .then(() => {
               message.success('专注完成，已记录');
               loadStats();
@@ -51,7 +48,7 @@ export function FocusPage() {
 
   const fmt = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
-  const totalWeek = stats.reduce((a, s) => a + (s.focusMinutes || 0), 0);
+  const totalWeek = stats.reduce((a, s) => a + (s.totalMin || 0), 0);
 
   return (
     <Card>
