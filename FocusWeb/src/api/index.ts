@@ -21,8 +21,7 @@ export const todo = {
   finish: (id: number, status: number, finishNote?: string) =>
     patch<Todo>(`/api/todos/${id}/finish`, { status, finishNote }),
   remove: (id: number) => del(`/api/todos/${id}`),
-  statistics: (days: number) =>
-    get<{ date: string; total: number; done: number }[]>('/api/todos/statistics', { days }),
+  statistics: (days: number) => get<{ total: number; done: number }>('/api/todos/statistics', { days }),
 };
 
 export const goal = {
@@ -53,6 +52,5 @@ export const category = {
 export const summary = {
   weekly: () => get<Summary>('/api/summary/weekly'),
   monthly: () => get<Summary>('/api/summary/monthly'),
-  // type 作为 query 参数烘焙进 URL（对齐 FocusLab），不走 GET 过滤封装
-  generate: (type: string) => post<Summary>(`/api/summary/generate?type=${type}`),
+  generate: (type: string) => post(`/api/summary/generate?type=${type}`),
 };

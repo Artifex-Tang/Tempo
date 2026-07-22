@@ -36,12 +36,6 @@ export interface Goal {
   deadline?: string;
 }
 
-export interface FocusRecord {
-  duration: number;
-  categoryId?: number;
-  startedAt: string;
-}
-
 export interface Category {
   id: number;
   name: string;
@@ -51,7 +45,16 @@ export interface Category {
 export interface DailyStat { day: string; totalMin: number; }
 
 export interface Summary {
-  type: string;
+  id?: number;
+  userId?: number;
+  type?: number;
+  periodStart?: string;
+  periodEnd?: string;
+  todoTotal: number;
+  todoDone: number;
+  focusTotalMin: number;
+  goalTotal: number;
+  goalDone: number;
   aiSummary?: string;
-  data?: Record<string, unknown>;
+  createdAt?: string;
 }
