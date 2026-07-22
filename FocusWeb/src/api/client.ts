@@ -64,13 +64,14 @@ export async function request<T = unknown>(
   throw new Error(payload.msg);
 }
 
-export const get = (url: string, data?: Record<string, unknown>, silent?: boolean) =>
-  request(url, 'GET', data, silent);
-export const post = (url: string, data?: Record<string, unknown>, silent?: boolean) =>
-  request(url, 'POST', data, silent);
-export const put = (url: string, data?: Record<string, unknown>, silent?: boolean) =>
-  request(url, 'PUT', data, silent);
-export const patch = (url: string, data?: Record<string, unknown>, silent?: boolean) =>
-  request(url, 'PATCH', data, silent);
-export const del = (url: string, data?: Record<string, unknown>, silent?: boolean) =>
-  request(url, 'DELETE', data, silent);
+// 泛型透传：调用方使用 get<Todo[]>(...) 时 T 转发至 request<T>
+export const get = <T = unknown>(url: string, data?: Record<string, unknown>, silent?: boolean) =>
+  request<T>(url, 'GET', data, silent);
+export const post = <T = unknown>(url: string, data?: Record<string, unknown>, silent?: boolean) =>
+  request<T>(url, 'POST', data, silent);
+export const put = <T = unknown>(url: string, data?: Record<string, unknown>, silent?: boolean) =>
+  request<T>(url, 'PUT', data, silent);
+export const patch = <T = unknown>(url: string, data?: Record<string, unknown>, silent?: boolean) =>
+  request<T>(url, 'PATCH', data, silent);
+export const del = <T = unknown>(url: string, data?: Record<string, unknown>, silent?: boolean) =>
+  request<T>(url, 'DELETE', data, silent);
