@@ -89,6 +89,7 @@ export function TodoPage() {
         loading={loading}
         dataSource={items}
         columns={columns}
+        pagination={{ pageSize: 50 }}
         rowSelection={{
           selectedRowKeys: selected,
           onChange: (keys) => setSelected(keys as number[]),

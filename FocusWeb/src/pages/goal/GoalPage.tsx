@@ -23,7 +23,10 @@ export function GoalPage() {
   const onAdd = async () => {
     const title = draft.trim();
     if (!title) return;
-    await goalApi.create({ title, type: 0, status: 0, progress: 0 });
+    // 后端 GoalDTO.targetDate @NotNull，默认截止=一月后（TODO: 加日期选择器让用户自选）
+    const d = new Date(Date.now() + 30 * 86400000);
+    const targetDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    await goalApi.create({ title, type: 0, status: 0, progress: 0, targetDate });
     setDraft('');
     load();
   };
