@@ -102,7 +102,7 @@ WX_MOCK_OPENID（开发旁路，生产必须留空）
 | DayCraft API | 8080 | **8081** | 8080 被 Docker Desktop 占用 |
 | MySQL | 3306 | **3308** | 3306/3307 被其他项目占用 |
 | Redis | 6379 | **6381** | 6379/6380 被其他项目占用 |
-| Web (FocusWeb) | 80 | 80 | nginx 托管 SPA + 反代 /api |
+| Web (FocusWeb) | 80 | `${WEB_PORT:-80}`（默认 80；本机被占可在 `.env` 设 `WEB_PORT=8082`） | nginx 托管 SPA + 反代 /api |
 
 ### 启动命令
 ```bash
