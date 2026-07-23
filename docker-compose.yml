@@ -87,7 +87,14 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - daycraft
+      daycraft:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
     networks:
       - tempo-net
