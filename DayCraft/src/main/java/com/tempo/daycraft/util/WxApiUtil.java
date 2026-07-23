@@ -43,6 +43,13 @@ public class WxApiUtil {
     }
 
     /**
+     * 微信 HTTP GET 注入点：测试子类可覆盖返回桩数据，避免真实网络调用。
+     */
+    protected String httpGet(String url) {
+        return HttpUtil.get(url);
+    }
+
+    /**
      * 微信网页 OAuth：用授权 code 换 openid（sns/oauth2/access_token）。
      * mock-openid 启用时直接返回，便于本地开发。失败抛 BusinessException(WX_LOGIN_FAIL)。
      */
@@ -57,7 +64,7 @@ public class WxApiUtil {
                 + "&code=" + URLEncoder.encode(code, StandardCharsets.UTF_8)
                 + "&grant_type=authorization_code";
         try {
-            String body = HttpUtil.get(url);
+            String body = httpGet(url);
             JSONObject json = JSONUtil.parseObj(body);
             if (json.containsKey("errcode") && json.getInt("errcode") != 0) {
                 log.warn("微信网页 oauth2 返回错误: {}", body);
@@ -92,7 +99,7 @@ public class WxApiUtil {
                 + "&js_code=" + URLEncoder.encode(code, StandardCharsets.UTF_8)
                 + "&grant_type=authorization_code";
         try {
-            String body = HttpUtil.get(url);
+            String body = httpGet(url);
             JSONObject json = JSONUtil.parseObj(body);
             if (json.containsKey("errcode") && json.getInt("errcode") != 0) {
                 log.warn("微信 jscode2session 返回错误: {}", body);
