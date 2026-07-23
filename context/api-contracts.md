@@ -7,7 +7,7 @@
 ### 请求
 - Content-Type: `application/json`
 - 鉴权 Header: `Authorization: Bearer {jwt_token}`
-- 白名单（无需 token）: `POST /api/auth/login`
+- 白名单（无需 token）: `POST /api/auth/login`、`POST /api/auth/web-mock-login`、`POST /api/auth/web-oauth/callback`
 
 ### 响应格式
 ```json
@@ -54,6 +54,21 @@
   "isNew": true
 }
 ```
+
+> 上面 `POST /api/auth/login` 是**小程序专用**。Web 端（FocusWeb）用下面两个端点，同 openid 体系，与小程序共享同一用户/数据。
+
+### POST /api/auth/web-mock-login
+**仅开发期**：后端 `WX_MOCK_OPENID` 非空时才发 JWT（`AuthServiceImpl.loginWebMock` 开头显式校验 `isMockOpenidEnabled()`）；生产留空即禁用，调用抛 `BusinessException`。
+**Request:** 无 body
+**Response data:** 同上 `LoginVO`
+
+### POST /api/auth/web-oauth/callback
+**生产期 Web 登录**：微信网页 OAuth 回调的 `code` 换 openid，复用 `loginByOpenid` 逻辑。
+**Request:**
+```json
+{ "code": "网页OAuth授权code" }   // @NotBlank @Size(max=64)
+```
+**Response data:** 同上 `LoginVO`
 
 ---
 

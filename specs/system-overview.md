@@ -37,6 +37,8 @@ DayCraft SummaryJob
     → upsert t_summary
 ```
 
+> **Web 端（FocusWeb）**：浏览器 → nginx（同源托管 SPA + 反代 `/api`）→ DayCraft。开发 `npm run dev`(:3000) 经 Vite 代理 `/api`→:8081。鉴权走 `POST /api/auth/web-mock-login`（dev，需 `WX_MOCK_OPENID`）或 `POST /api/auth/web-oauth/callback`（生产，微信网页扫码）；同一 openid 体系 → 与小程序同一用户、同一份数据。
+
 ---
 
 ## 数据流：一次完整的待办完成流程
