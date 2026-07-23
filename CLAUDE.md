@@ -168,6 +168,10 @@ docker compose build daycraft && docker compose up -d daycraft
 **原因**：字段名/必填/形状以 `context/api-contracts.md` 为准（不在此重复）。曾因凭记忆猜字段反复返工：focus 需 `durationMin`（非 duration）、goal `targetDate` 必填、todo 今日页要传 `dueDate`、`todo.statistics` 返回对象非数组、summary 返回实体字段（todoTotal 等）。
 **方案**：新增/改前端 API 调用前，先查 `context/api-contracts.md` 对应小节。
 
+### AD-10：Windows 禁止按映像名批量杀 node.exe（会搞挂 Docker）
+**原因**：Windows 上 Docker Desktop 部分组件跑在 node.exe 里。`Stop-Process -Name node -Force` / `taskkill /IM node.exe /F` 一把全杀会把 Docker daemon 一起带走 → 非 `restart=always` 的容器全停（tempo 全栈、open-webui、ollama 都挂过）。2026-07-24 实踩，全栈停摆。
+**方案**：清 dev 残留进程只按 **PID/端口** 精确杀（`netstat -ano | findstr :3000` → `taskkill //F //PID <pid>`），绝不按映像名批量杀 node。`npm run dev` 残留在 Win 上 TaskStop 不杀子进程是已知，逐端口清即可。
+
 ---
 
 ## 已知 Bug 与修复
