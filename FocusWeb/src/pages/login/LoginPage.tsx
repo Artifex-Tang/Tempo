@@ -7,8 +7,15 @@ import { useEffect } from 'react';
 const { Title, Text } = Typography;
 
 const IS_DEV = import.meta.env.DEV;
-const WX_OAUTH_URL = 'https://open.weixin.qq.com/connect/qrconnect'
-  + '?appid=YOUR_APPID&redirect_uri=YOUR_REDIRECT&response_type=code&scope=snsapi_login#wechat_redirect';
+// 生产微信网页 OAuth：appid/redirect 通过构建期环境变量注入（FocusWeb/.env 的 VITE_WX_*）
+const WX_APPID = import.meta.env.VITE_WX_APPID;
+const WX_REDIRECT_URI = import.meta.env.VITE_WX_REDIRECT_URI;
+const wxOAuthUrl = WX_APPID && WX_REDIRECT_URI
+  ? 'https://open.weixin.qq.com/connect/qrconnect'
+    + `?appid=${encodeURIComponent(WX_APPID)}`
+    + `&redirect_uri=${encodeURIComponent(WX_REDIRECT_URI)}`
+    + '&response_type=code&scope=snsapi_login#wechat_redirect'
+  : null;
 
 export function LoginPage() {
   const nav = useNavigate();
@@ -50,7 +57,11 @@ export function LoginPage() {
           <>
             <Text type="secondary">请使用微信扫码登录</Text>
             <Divider />
-            <Button type="primary" block href={WX_OAUTH_URL}>微信扫码</Button>
+            {wxOAuthUrl ? (
+              <Button type="primary" block href={wxOAuthUrl}>微信扫码</Button>
+            ) : (
+              <Text type="danger">未配置微信登录（需设置 VITE_WX_APPID / VITE_WX_REDIRECT_URI）</Text>
+            )}
           </>
         )}
       </Card>
